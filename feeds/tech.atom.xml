@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Poomalairaj's weblog</title><link href="/" rel="alternate"></link><link href="/feeds/tech.atom.xml" rel="self"></link><id>/</id><updated>2012-04-17T19:52:00+05:30</updated><entry><title>N900 not booting</title><link href="/n900-not-booting.html" rel="alternate"></link><updated>2012-04-17T19:52:00+05:30</updated><author><name>Poomalairaj</name></author><id>tag:,2012-04-17:n900-not-booting.html</id><summary type="html">&lt;h3&gt;N900 not booting : I almost bricked my phone. No initfs \o/&lt;/h3&gt;
+&lt;p&gt;Yesterday I messed with easy debian chroot on my N900 so, I deleted the easy debian image and copied fresh one to my N900. When I was trying to install phpmyadmin in easydebian, suddenly N900 turned off and then rebooted. It was stuck at showing five dots animation splash screen foreaver and never loads desktop. I tried to reboot, remove battery and inserted again. Still my N900 not booting.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="N900 Booting" src="/static/img/n900-booting.jpg" /&gt;&lt;/p&gt;
+&lt;p&gt;As a last resort, I tried to flash N900. Flashing went well but still the problem was there. I thought I bricked my N900. My wife will kill me if I ask another N900. :(&lt;/p&gt;
+&lt;p&gt;Then I found cpitchford’s notes on nokia forum. He hinted to turn on R&amp;amp;D mode of N900.
+So I did the following…&lt;/p&gt;
+&lt;h3&gt;Enable R&amp;amp;D mode in N900&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Switch off the phone&lt;/li&gt;
+&lt;li&gt;Press and hold “U” button on the keyboard&lt;/li&gt;
+&lt;li&gt;insert usb cable on N900 and insert other end to PC&lt;/li&gt;
+&lt;li&gt;Let go the “U” key once you see Nokia logo and USB icon on the top right corner&lt;/li&gt;
+&lt;li&gt;Now open a commnad prompt and enter following command to turn on the R&amp;amp;D mode&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;sudo flasher-3.5 --enable-rd-mode&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Once the flasher completes that, remove usb cable and reboot the phone&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;cpitchford’s said it should boot now. But mine didn’t. But it provided me an important information. It said &lt;strong&gt;No initfs \o/&lt;/strong&gt; while turning on the phone. So it seems initfs is missing on the phone. The initfs actually resides in EMMC. Oh my god. If I flash EMMC, I will lose all my data… again…! :(&lt;/p&gt;
+&lt;p&gt;Okay. There is no better option now. I have to flash EMMC. To do that I following steps from 1 to 4 and then entered the following commands&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="n"&gt;flasher&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;3.5&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;F&lt;/span&gt; &lt;span class="n"&gt;RX&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;51&lt;/span&gt;&lt;span class="n"&gt;_2009SE_20&lt;/span&gt;&lt;span class="mf"&gt;.2010.36&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="n"&gt;_PR_COMBINED_MR0_ARM&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bin&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;
+&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="n"&gt;flasher&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;3.5&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;F&lt;/span&gt; &lt;span class="n"&gt;RX&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;51&lt;/span&gt;&lt;span class="n"&gt;_2009SE_10&lt;/span&gt;&lt;span class="mf"&gt;.2010.13&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;2.&lt;/span&gt;&lt;span class="n"&gt;VANILLA_PR_EMMC_MR0_ARM&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bin&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;R&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;First command flashes the OS and the second one flashes Emmc and create the lost initfs again. After the second command finish its job, the device will reboot.
+Again the five dots animation… But wait… yay, My N900 boots normally and the mighty hildon desktop is loaded successfully.&lt;/p&gt;
+&lt;p&gt;Somebody said in forum that, &lt;strong&gt;There is no such thing as bricked N900 as long as there is not physical or component damage&lt;/strong&gt;. It is true. Again I have to install all the stuff again. sigh…&lt;/p&gt;
+&lt;p&gt;I will update in another blog post about the settings I usually do after flashing N900.&lt;/p&gt;</summary><category term="n900"></category></entry></feed>
