@@ -1,5 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Poomalairaj's weblog</title><link href="/" rel="alternate"></link><link href="/feeds/all.atom.xml" rel="self"></link><id>/</id><updated>2012-04-17T19:52:00+05:30</updated><entry><title>N900 not booting</title><link href="/n900-not-booting.html" rel="alternate"></link><updated>2012-04-17T19:52:00+05:30</updated><author><name>Poomalairaj</name></author><id>tag:,2012-04-17:n900-not-booting.html</id><summary type="html">&lt;h3&gt;N900 not booting : I almost bricked my phone. No initfs \o/&lt;/h3&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Poomalairaj's weblog</title><link href="/" rel="alternate"></link><link href="/feeds/all.atom.xml" rel="self"></link><id>/</id><updated>2013-06-03T06:40:00+05:30</updated><entry><title>SSH login without a password</title><link href="/ssh-login-without-password.html" rel="alternate"></link><updated>2013-06-03T06:40:00+05:30</updated><author><name>Poomalairaj</name></author><id>tag:,2013-06-03:ssh-login-without-password.html</id><summary type="html">&lt;h3&gt;SSH login&lt;/h3&gt;
+&lt;p&gt;Many a times, we don't want to type a passowrd to login to a remote host through ssh. There can be many reasons not to enter a password in ssh login. This include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Don't want to remember password&lt;/li&gt;
+&lt;li&gt;Managing many hosts and entering password is a tedious task&lt;/li&gt;
+&lt;li&gt;Need more security than a password&lt;/li&gt;
+&lt;li&gt;Need to use ssh in a shell script&lt;/li&gt;
+&lt;li&gt;Don't want to enter password in a version control system that use ssh as transport&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Typically when you want to connect to a host using ssh, you would do something similar to the following&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;$ ssh alice@wonderland.com
+The authenticity of host &amp;#39;wonderland.com (111.222.333.444)&amp;#39; can&amp;#39;t be established.
+RSA key fingerprint is 83:51:02:f3:ee:9b:02:00:ee:bb:dd:65:86:05:07:85.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added &amp;#39;wonderland.com,111.222.333.444&amp;#39; (RSA) to the list of known hosts.
+alice@wonderland.com&amp;#39;s password:
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The very first time, ssh will ask your permission to save RSA key finger print of the host. Subsequent logins will use the finger print to make sure that we are connecting to the right host. When the identity of the host is changed, ssh will warn you that the finger print isn't matching.&lt;/p&gt;
+&lt;h3&gt;Create ssh keys&lt;/h3&gt;
+&lt;p&gt;we can make use of ssh keys and ssh config to make ssh login process easier and more secure. &lt;code&gt;ssh-keygen&lt;/code&gt; generates asymmetric key pair that can be used for ssh authentication.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;$ ssh-keygen -t rsa
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/alice/.ssh/id_rsa): 
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /home/alice/.ssh/id_rsa.
+Your public key has been saved in /home/alice/.ssh/id_rsa.pub.
+The key fingerprint is:
+83:51:02:f3:ee:9b:02:00:ee:bb:dd:65:86:05:07:85 alice@alice-laptop
+The key&amp;#39;s randomart image is:
++--[ RSA 2048]----+
+|   .o. .o        |
+|    .. ...       |
+|  . ..=.  + .    |
+|   o oo+ o +     |
+|    o  .s. .o.   |
+|     .  . + +.   |
+|         o + .   |
+|          . F    |
+|                 |
++-----------------+
+$
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This command will create a key pair (private key &lt;code&gt;id_rsa&lt;/code&gt; and public key &lt;code&gt;id_rsa.pub&lt;/code&gt;) in &lt;code&gt;/home/alice/.ssh/&lt;/code&gt;.
+You can use dsa or rsa1 in the place of rsa to select encryption algorithm type to create keys. While creating keys, &lt;code&gt;ssh-keygen&lt;/code&gt; will ask you to set a passphrase for the key. When a passphrase is set to the key, the key can not be used if the passphrase is unknown. This passphrase is not the password of the ssh login. This is exclusively set for the generated key. This adds more security to the ssh login. Even if someone get the key, they can not login to the server if the passphrase of
+the key is unknown. You might want to create a key with empty passphrase for password less key based ssh login. This can be done by merely hitting enter key when passphrase is prompted.&lt;/p&gt;
+&lt;h3&gt;Add public key to the ssh server&lt;/h3&gt;
+&lt;p&gt;Now it's time to add the generated public key to the ssh server's &lt;code&gt;authorized_keys&lt;/code&gt; file. This can be done using the following commands&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="gp"&gt;$&lt;/span&gt; cat ~/.ssh/id_rsa.pub | ssh alice@wonderland.com &lt;span class="s1"&gt;&amp;#39;cat &amp;gt;&amp;gt; ~/.ssh/authorized_keys&amp;#39;&lt;/span&gt;
+&lt;span class="go"&gt;alice@wonderland.com&amp;#39;s password:&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This command should copy the generated rsa public key to authorized_keys file of the user alice at the wonderland.com server.
+You can also use &lt;code&gt;ssh-copy-id&lt;/code&gt; command to copy the public key to the server.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="gp"&gt;$&lt;/span&gt; ssh-copy-id -i ~/.ssh/id_rsa.pub alice@wonderland.com
+&lt;span class="go"&gt;alice@wonderland.com&amp;#39;s password:&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;We will check if we can login to the server using the private key.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="gp"&gt;$&lt;/span&gt; ssh alice@wonderland.com -i ~/.ssh/id_rsa
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This command should let us login to the ssh host wonderland.com without a password. (A passphrase may be prompeted if you have set one for the ssh private key). There is not need to add the option &lt;code&gt;-i ~/.ssh/id_rsa&lt;/code&gt; because the the default action is to use a key &lt;code&gt;id_rsa&lt;/code&gt; of &lt;code&gt;id_dsa&lt;/code&gt; if present in &lt;code&gt;~/.ssh&lt;/code&gt;. The -i argument can be useful if you have more than one private key. You can create many private keys for many ssh hosts and save them in .ssh directory.&lt;/p&gt;
+&lt;h3&gt;SSH config&lt;/h3&gt;
+&lt;p&gt;There are many options can be used with ssh login. Some of these options are&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ssh port (-p 22)&lt;/li&gt;
+&lt;li&gt;ssh private key path (-i ~/.ssh/&lt;name of the key&gt;)&lt;/li&gt;
+&lt;li&gt;ssh host name&lt;/li&gt;
+&lt;li&gt;ssh host address / ip&lt;/li&gt;
+&lt;li&gt;ssh user name&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;These options can be added in a config file at user's .ssh directory. By using ssh config file, we can manage multiple hosts with different settings for each.&lt;/p&gt;
+&lt;p&gt;A sample ssh config file looks something like this&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nb"&gt;Host&lt;/span&gt; wl 
+&lt;span class="nb"&gt;HostName&lt;/span&gt; wonderland.com
+&lt;span class="nb"&gt;User&lt;/span&gt; alice
+&lt;span class="nb"&gt;IdentityFaconfile&lt;/span&gt; &lt;span class="sx"&gt;/home/alice/.ssh/id_rsa_wonderland.com&lt;/span&gt;
+&lt;span class="nb"&gt;IdentitiesOnly&lt;/span&gt; yes
+
+&lt;span class="nb"&gt;Host&lt;/span&gt; ml 
+&lt;span class="nb"&gt;HostName&lt;/span&gt; magicland.com
+&lt;span class="nb"&gt;User&lt;/span&gt; bob
+&lt;span class="nb"&gt;IdentityFile&lt;/span&gt; &lt;span class="sx"&gt;/home/alice/.ssh/id_rsa_magicland.com&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;When you use an ssh config above, you can login using one of the commands below.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="gp"&gt;$&lt;/span&gt; ssh wl
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This command will use user name &lt;code&gt;alice&lt;/code&gt; to the host name &lt;code&gt;wonderland.com&lt;/code&gt; with private identity key file &lt;code&gt;/home/alice/.ssh/id_rsa_wonderland.com&lt;/code&gt;. Handy isn't it?&lt;/p&gt;
+&lt;p&gt;Want to copy a file to wonderland.com? Its easy with scp&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="gp"&gt;$&lt;/span&gt; scp ~/myfile.txt wl:~/
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;See, no need to type the user name, host address and password. Just use the ssh host name wherever you need to use ssh login.
+This can apply to git clone as well. Consider that a git repo &lt;code&gt;land.git&lt;/code&gt; in wonderland.com's home directory. To clone this using ssh protocol, use the following command.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="gp"&gt;$&lt;/span&gt; git clone wl:~/land.git .
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This command should clone the git repo &lt;code&gt;land.git&lt;/code&gt; at wonderland.com without asking you a password. After cloning the repo, pulling and pushing should use the ssh config and hence it won't ask you a password.&lt;/p&gt;
+&lt;p&gt;Use of ssh key has another advantage that you don't have to worry even if the unix password of the ssh user is changed in the server. When you use ssh key, it will login to the server just fine.&lt;/p&gt;
+&lt;p&gt;Note: It is highly recommeded to delete the public key from your work station to avoid someone else stealing the public key. When someone get the public key, they can make you believe that their server is wonderland.com. When someone gets the private key, they can use it to login to wonderland.com.&lt;/p&gt;
+&lt;h3&gt;Security notes&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Always protect .ssh directory with permissions 600.&lt;/li&gt;
+&lt;li&gt;Delete ssh public key once it is copied to the remote host.&lt;/li&gt;
+&lt;li&gt;Don't share the ssh public and private key.&lt;/li&gt;
+&lt;li&gt;Use passphrase for the private ssh key whenever possible.&lt;/li&gt;
+&lt;li&gt;Always check the remote host if ssh complains that the key finger print is mismatching.&lt;/li&gt;
+&lt;/ul&gt;</summary><category term="ssh"></category><category term="linux"></category></entry><entry><title>N900 not booting</title><link href="/n900-not-booting.html" rel="alternate"></link><updated>2012-04-17T19:52:00+05:30</updated><author><name>Poomalairaj</name></author><id>tag:,2012-04-17:n900-not-booting.html</id><summary type="html">&lt;h3&gt;N900 not booting : I almost bricked my phone. No initfs \o/&lt;/h3&gt;
 &lt;p&gt;Yesterday I messed with easy debian chroot on my N900 so, I deleted the easy debian image and copied fresh one to my N900. When I was trying to install phpmyadmin in easydebian, suddenly N900 turned off and then rebooted. It was stuck at showing five dots animation splash screen foreaver and never loads desktop. I tried to reboot, remove battery and inserted again. Still my N900 not booting.&lt;/p&gt;
 &lt;p&gt;&lt;img alt="N900 Booting" src="/static/img/n900-booting.jpg" /&gt;&lt;/p&gt;
 &lt;p&gt;As a last resort, I tried to flash N900. Flashing went well but still the problem was there. I thought I bricked my N900. My wife will kill me if I ask another N900. :(&lt;/p&gt;
