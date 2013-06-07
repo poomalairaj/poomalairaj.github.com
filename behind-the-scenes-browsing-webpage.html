@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <title>Poomalairaj's weblog</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Poomalairaj">
+        
+    <!-- Le styles -->
+    <link href="./theme/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+          padding-top: 60px;
+          padding-bottom: 40px;
+      }
+      .sidebar-nav {
+          padding: 9px 0;
+      }
+    </style>
+    <link href="./theme/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="./theme/local.css" rel="stylesheet">
+    <link href="./theme/pygments.css" rel="stylesheet">
+    <script>if(document.location.href.indexOf('github')==-1){ga_id='UA-30309581-1'}else{ga_id='UA-41310292-1'} var _gaq=[['_setAccount', ga_id],['_trackPageview']];(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.src='//www.google-analytics.com/ga.js';s.parentNode.insertBefore(g,s)}(document,'script'))</script>
+    <script type="text/javascript">
+  var disqus_shortname = "poomalairaj"; // required: replace example with your forum shortname
+  var disqus_developer = 1;
+  
+    var disqus_identifier = "behind-the-scenes-browsing-webpage.html";
+  (function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+  
+  (function () {
+  var s = document.createElement('script'); s.async = true;
+  s.type = 'text/javascript';
+  s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  }());
+</script>
+  </head>
+  <body>
+<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+            
+    <div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container-fluid">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+	<span class="icon-bar"></span>
+	<span class="icon-bar"></span>
+	<span class="icon-bar"></span>
+      </a>
+      <a class="brand" href="./index.html">Poomalairaj's weblog</a>
+      <div class="nav-collapse collapse">
+	<ul class="nav">
+	  	  	  	  <li><a href="./pages/about-me.html">About Me</a></li>
+	  	  	  	  <li class="active"><a href="./category/tech.html">Tech</a></li>
+	  	</ul>
+	<p class="navbar-text pull-right">
+	  <a class="navbar-link" href="./archives.html">[archives]</a>
+	  <a class="navbar-link" href="./tags.html">[tags]</a>
+	</p>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+</div>
+    <div class="container-fluid">
+      <div class="row-fluid">
+	<div class="span1">&nbsp;</div>
+	<div class="span10">
+	  <div class="row-fluid">
+            <div class="span9">
+	      	      <div class='article'>
+  <div class="page-header"><h1>What happens behind the scenes when you browse a webpage over Internet</h1></div>
+  <div class="well small"><a class="more" href="./behind-the-scenes-browsing-webpage.html">On 07 Jun 2013 at 14:14</a>
+by <a class="url fn" href="./author/poomalairaj.html">Poomalairaj</a> in <a href="./category/tech.html">Tech</a>
+ | <a href="./behind-the-scenes-browsing-webpage.html#disqus_thread">Comments</a></div>
+  <div><h2>Intro</h2>
+<p>I can see that people are very interested to know what happens behind the scenes when they browse a webpage over Internet. Some of my friends keep on asking me to explain the whole process more than one time. Though I found some of the explanations on the Internet, nothing seems to be explaining the process in depth. So, I decided to write my own version. Hope this might help some.</p>
+<p>When you try to explain the background processes that happen when you visit a page, you can explain it with different levels of accuracies. It can be as simple as saying, "Enter a url in the browser and you get the page you want" or it can be a very long blog post. I chose the second option and I will try to cover as much details as I can.</p>
+<h2>Browser</h2>
+<p>Ok, Lets start with web browser. You want to visit the page <code>mozilla.org</code>. What would you do? That's right, you will type "mozilla.org" in the address bar of the browser and press enter key or the "go" button. If you are using a modern browser, the browser might start to search the past history of urls and shows the urls that match the entered url (Some browsers even matches the title of the past visited pages). Let's assume that you don't use the browser's suggestion and just enter
+"mozilla.org" and hit enter key.</p>
+<p>To access a web resource some of the following things are needed.</p>
+<ul>
+<li>The protocol - The browser has to speak the language that the server understands</li>
+<li>Unique resource identifier - We need the right address to get the resource otherwise we will not be able to find the "home"</li>
+<li>Port number</li>
+</ul>
+<p>If the supplied address is not a valid domain name or url, then the browser assumes that the provided data is a key word and it might load up a default search engine's page to search the key word we have entered.</p>
+<p>But, we have supplied domain name alone. Now the browser has to assume the rest. 
+For the Protocol - Most likely it is going to be "http" for a web resource. So the browser assumes and prepends http:// to the supplied domain name.</p>
+<p>The default port for web servers is <code>80</code> and the browser uses port 80 for the url.
+Now we got a uniform resource identifier "http://mozilla.org:80"</p>
+<h2>Browser proxy (Optional)</h2>
+<p>The browser checks if any proxy server has been set or not before starting any network stack. If a proxy has been set, browser sends all network related requests through the proxy server.</p>
+<h2>Domain name resolution</h2>
+<p>Now that the browser has a url to the page you want to see, it tries to find how to get there. IP address is required to connect to a host. But we only have a url with domain name. Here comes the Domain name servers or most commonly known as DNS servers for help.
+DNS server is a database of domain name to ip address mapping and vice versa. We can give the DNS server the domain name and ask IP address or provide IP address and ask for the domain name. There are different levels of <code>name service</code>.</p>
+<ul>
+<li>Browser DNS cache</li>
+<li>OS DNS cache</li>
+<li>Local DNS server cache (Optional)</li>
+<li>Router DNS cache</li>
+<li>ISP DNS cache</li>
+<li>Root DNS server cache</li>
+</ul>
+<p>First the browser checks the browser's own dns cache to see if it can resolve the ip address from the domain name itself. But browser's domain name cache is shortlived (2-30 mins).</p>
+<p>If it fails, browser uses a system call to ask the Operating system if it can resolve the ip address. Before searching the OS DNS cache, the operating system will check with the <code>hosts</code> file. If the domain name is defined there, that ip address will be returned. If not, the OS will search its own DNS cache.</p>
+<p>When OS cache fails, the operating system asks the DNS server set in the OS. The DNS server set in the OS can be a local DNS server or the Internet Service Provider's DNS server. If the local DNS cache fails, It will ask the ISP's DNS server</p>
+<p>If the ISP's DNS cache fails, it will ask the Root DNS servers.</p>
+<p>If Root DNS server also fails, that means that there is no such domain name exists. If Root DNS server responds with the IP address, all the other DNS servers that didn't have the mapping before will cache it and forward to the previous one. i.e., ISP's DNS, Local DNS, OS DNS, Browser DNS cache the ip mapping and return the ip address to the browser. Modern webservers might have more than one IP for redundancy.</p>
+<h2>Server Not found</h2>
+<p>When a domain name can not be resolved to an ip address, browser should tell the user that the server could not be found.
+Every browser has its own way of saying this error. Basically the browser loads a html page that communicate the user that the server could not be found and shows a short message what could be the possible reasons.</p>
+<h2>HTTP request</h2>
+<p>The browser got the IP address of the domain name and now it's time to send HTTP request to the server responsible for mozilla.org.
+An HTTP request typically contains the following</p>
+<ul>
+<li>The server name</li>
+<li>HTTP method</li>
+<li>protocol and version</li>
+</ul>
+<p>But there can be more information sent to the server. A typical http request to mozilla.org looks like this.</p>
+<div class="highlight"><pre>http://mozilla.org/
+
+GET / HTTP/1.1
+Host: mozilla.org
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:20.0) Gecko/20100101 Firefox/20.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Cookie: __utma=150903082.669815343.1368174869.1370597045.1370603010.4; __utmz=150903082.1370597045.3.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utmb=150903082.5.10.1370603010; __utmc=150903082
+Connection: keep-alive
+</pre></div>
+
+
+<p>This request shows that <code>http://mozilla.org/</code> is the server name. Notice the trailing slash at the end of the url. This says that the root page is requested. When we don't mention the actual page/resource in the url, it is assumed that the root page is asked. This is typically the home page of the website.</p>
+<p>GET is the http method the browser use to get the data. There are more HTTP methods (or verbs technically) available in HTTP protocol. See wikipedia article on <a href="http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol" title="Hypertext Transfer Protocol">HTTP protocol and HTTP request methods</a> for more information.</p>
+<p>User agent is the signature of browser. Accept header says that the browser is able to interpret html and xml formatted data. Accept-Language says the language the browser understands, Accpet-encoding is the one that informs the server that the browser is capable of decompressing data compressed with gzip and deflate algorithms.</p>
+<p>The browser also sends the cookies for the domain if it is already set. There can be more headers depending the on the browsers.</p>
+<p>Now this request headers are sent to mozilla.org server's ip address previously resolved with the DNS server.</p>
+<h2>Request's travel</h2>
+<p>The request originates from a port port of the user's computer and based on Operating system's gateway settings, it reaches the internet modem or router. If there is any firewall system present in the computer the firewall audits the request before sending it to the gateway. The router has its <code>public ip</code> and this ip is used as the user's ip address. The router sends the request through the internet service provider. There can be firewalls and content moderation systems present at
+router and the ISP. Once the request passes through ISP successfully, it goes through various routers and reaches mozilla.org's server.</p>
+<p>Again there can be firewalls at mozilla.org and the request should pass through that. The actualy server responsible for the domain mozilla.org can be a <a href="http://en.wikipedia.org/wiki/Reverse_proxy">reverse proxy</a> or a <a href="http://en.wikipedia.org/wiki/Load_balancer">load balancer</a>.</p>
+<p>The load balancer or the reverse proxy might add or strip one or more components of the request headers. Then the load balancer will send the request to one of the backend servers that is responsible based on the availability of the backend server or just based on round robin scheduling. </p>
+<h2>At the backend server</h2>
+<p>Now the request reaches the actual backend server that is responsible for the actual content. The web server runs at the backend machine reads the request and based on the type of the resource requested, it loads up the appropriate request handler. If the requested content is just a plain html or static content, the web server loads the file from hard disk and generates the response headers and appends the actual content and sends the response back to the browser.</p>
+<h3>Redirects</h3>
+<p>If the requested resource is located somewhere else, the browser may choose to send a redirect response to the browser. The browser has to request the new location again to get the content.</p>
+<p>In out case the response is as follows</p>
+<div class="highlight"><pre>HTTP/1.1 301 Moved Permanently
+Server: Apache
+X-Backend-Server: bedrock3.webapp.phx1.mozilla.com
+Content-Type: text/html; charset=iso-8859-1
+Date: Fri, 07 Jun 2013 11:04:28 GMT
+Location: http://www.mozilla.org/
+Keep-Alive: timeout=5, max=997
+Content-Length: 231
+Connection: Keep-Alive
+X-Cache-Info: cached
+</pre></div>
+
+
+<p>This response header says that the content you request has been moved permanently and you can find it at <code>Location: http://www.mozilla.org/</code>. The server also states about itself such as the name of the server is Apache, Name of the backend server is <code>bedrock3.webapp.phx1.mozilla.com</code>. The content is formatted as html, length of the content etc. There can be non-standard http response headers present. These headers start with <code>X-</code>. This is may be used by client side scripting
+languages or by the browser itself.</p>
+<p>Now the browser knows where to get the content (<code>http://www.mozilla.org/</code>). Note the <code>www</code> prefix to the url. This is called 'subdomain'. Browser does the whole process similar to the one that is done so far and sends a request to http://www.mozilla.org/.</p>
+<p>The request looks something like this</p>
+<div class="highlight"><pre>http://www.mozilla.org/
+
+GET / HTTP/1.1
+Host: www.mozilla.org
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:20.0) Gecko/20100101 Firefox/20.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Cookie: __utma=150903082.669815343.1368174869.1370597045.1370603010.4; csrftoken=a90293d39b7f8d4a520a7f9d7e8ac4e3; __utmz=150903082.1370597045.3.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utmb=150903082.5.10.1370603010; __utmc=150903082
+Connection: keep-alive
+</pre></div>
+
+
+<h2>Server side scripting or CGI</h2>
+<p>Now that the browser has found the right url to request the server (Ah... at last!) the server loads up the handler for the request. Let's assume that this request needs to get some data from a database. The server itself may not be able to access the database directly. For this purpose it loads a server side scripting language or a <a href="http://en.wikipedia.org/wiki/Common_Gateway_Interface">CGI</a> program to do the job.</p>
+<p>Server side scripting language such as php, python, ruby or java understands the request and connects to the database. Executes the query to get the relevant data and formats the data as HTML so that the browser can understand it and render. In some cases such as web services, the content is formatted as XML or json. Once the content generation is done, proper response headers are added to the response and the content is appended in the reponse body. Additional headers such as cookies
+are added. Now the server takes the control
+and optionally adds or removes one or more response headers. The response is sent to the load balancer or reverse proxy. The reverse proxy or the load balancer might add or remove some of the response headers such as cache status, time to live etc.</p>
+<p>The content may optionally be compressed based on the request headers from browser. At any time if the front end server or back end server feels that the requested content is not available, it responds with a 404 error.
+There can be more http response codes that can be sent to the browser such as server error, not found header, redirect header etc.</p>
+<h2>Back to browser</h2>
+<p>Now the content is ready and the response is sent to the user's ip address where the router is. The response travels back to many hops at various hosts and reaches ISP's server and then to the user's router. The router sends the response to the appropriate machine. Again at ISP or at router or at user's machine, firewall may check the content and based on the rules, it allows or denies the data.</p>
+<p>Once the response data is back to browser, the browser starts to decompress the content if it is already compressed by the server. The decompressed content is parsed based on the content type. Let's say that it is HTML. The html is parsed and <a href="http://en.wikipedia.org/wiki/Document_object_model">DOM</a> tree is generated by the browser.</p>
+<p>Then the browser analyzes for the additional resources to be loaded. Additional resource can be CSS, Javascript, images, videos, audios or other objects. Again http requests are sent to load these additional resources.</p>
+<h2>Rendering</h2>
+<p>Once all resources are loaded, the browser starts to evaluate javascript using the built-in javascirpt engine. CSS styles are applied using layout engine. The layout engine starts to "paint" the actual content. HTML tables, buttons, widgets, images and videos are rendered.</p>
+<p>Ha... Page is ready now.</p>
+<h2>Final thoughts</h2>
+<p>I have tried my best to put together all the pieces in place. There can be inaccuracies and I might have missed something. Comments and improvements are welcome. I think a flow diagram explaining this process can be very helpful. For now I am not going to do that.</p></div>
+    <div>
+    <h2>Comments</h2>
+            <div id="disqus_thread"></div>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+          </div>
+  </div>	
+            </div><!--/span-->
+
+	    <div class="span3">
+	      
+
+            </div><!--/span-->
+
+	  </div>
+	</div>
+      </div><!--/row-->
+
+      <hr>
+
+      <footer>
+        <p>Powered by <a href="http://alexis.notmyidea.org/pelican/">Pelican</a></p>
+	<p>&copy; Poomalairaj 2012</p>
+      </footer>
+
+    </div><!--/.fluid-container-->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="./theme/js/jquery-1.7.2.min.js"><\/script>')</script>
+    <script src="./theme/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./theme/js/modernizr-2.5.3-respond-1.1.0.min.js"></script>
+    <script type="text/javascript">
+	$(document.links).filter(function() {
+		    return this.hostname != window.location.hostname;
+	}).attr('target', '_blank');
+    </script>
+  </body>
+</html>
