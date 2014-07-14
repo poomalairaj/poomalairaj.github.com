@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <title>Poomalairaj's weblog</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Poomalairaj">
+
+    <!-- Le styles -->
+    <link href="./theme/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+          padding-top: 60px;
+          padding-bottom: 40px;
+      }
+      .sidebar-nav {
+          padding: 9px 0;
+      }
+    </style>
+    <link href="./theme/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="./theme/local.css" rel="stylesheet">
+    <link href="./theme/pygments.css" rel="stylesheet">
+<script>if(document.location.href.indexOf('github')==-1){ga_id='UA-30309581-1'}else{ga_id='UA-41310292-1'} var _gaq=[['_setAccount', ga_id],['_trackPageview']];(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.src='//www.google-analytics.com/ga.js';s.parentNode.insertBefore(g,s)}(document,'script'))</script>
+<script type="text/javascript">
+  var disqus_shortname = "poomalairaj"; // required: replace example with your forum shortname
+  var disqus_developer = 1;
+  
+  var disqus_identifier = "authentication-fix-owncloud6-webfaction.html";
+  (function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+
+  (function () {
+  var s = document.createElement('script'); s.async = true;
+  s.type = 'text/javascript';
+  s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  }());
+</script>
+  </head>
+  <body>
+<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+    
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container-fluid">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+	<span class="icon-bar"></span>
+	<span class="icon-bar"></span>
+	<span class="icon-bar"></span>
+      </a>
+      <a class="brand" href="./index.html">Poomalairaj's weblog</a>
+      <div class="nav-collapse collapse">
+	<ul class="nav">
+	  <li><a href="./pages/about-me.html">About Me</a></li>
+	  <li class="active"><a href="./category/tech.html">Tech</a></li>
+	</ul>
+	<p class="navbar-text pull-right">
+	  <a class="navbar-link" href="./archives.html">[archives]</a>
+	  <a class="navbar-link" href="./tags.html">[tags]</a>
+	</p>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+</div>
+    <div class="container-fluid">
+      <div class="row-fluid">
+	<div class="span1">&nbsp;</div>
+	<div class="span10">
+	  <div class="row-fluid">
+            <div class="span9">
+<div class='article'>
+  <div class="page-header"><h1>Authentication fix of Owncloud 6 for webfaction hosting</h1></div>
+  <div class="well small"><a class="more" href="./authentication-fix-owncloud6-webfaction.html">On 14 Jul 2014 at 17:40</a>
+by <a class="url fn" href="./author/poomalairaj.html">Poomalairaj</a> in <a href="./category/tech.html">Tech</a>
+ | <a href="./authentication-fix-owncloud6-webfaction.html#disqus_thread">Comments</a></div>
+  <div><h3>Owncloud and me</h3>
+<p>I've been using owncloud ever since I switched to Nexus 4 from my beloved N900 since I didn't want to use google's services to store my contacts and calendars. Owncloud is a cool application to serve many of personal services like calendar, contacts, file sync, bookmarks, music etc. It becomes even cooler since you can sync/serve your data from your own infrastructure without relying on google or dropbox.</p>
+<p>I've been using OC5 for a long time and couple of days ago, I decided to upgrade to OC6. While upgrading to OC6 I remembered that I did some code change in the OC's core files to fix something but I couldn't remember what it was. I finally convinced that it could be some weird bug in OC that was not fixed at that time and assuming that OC6 might have a fix for that, I just went on to upgrade to OC6. I did backup and upgraded to OC6. Everything went fine and I was able to login to OC6 from the browser.</p>
+<h3>Basic Authentication &amp; Webfaction</h3>
+<p>I tried to sync my contacts in my Nexus 4 using <a href="https://play.google.com/store/apps/details?id=org.dmfs.carddav.sync" title="CardDav-Sync free Beta">carddav sync free</a> and I got authentication error. Ah! This was the problem, I thought. Tried to downgrade to OC5, reinstalled couple of times. Nothing worked. Tried to install OC6 on my laptop and Bingo! it works fine. So this must be a problem with Webfaction. I raised a support ticket with webfaction. As always webfaction guys responded immediately with a fine solution.</p>
+<p>Basically, what Owncloud does is that it extracts the user name and password from HTTP header via mod_rewrite and provides it to PHP over environment variables. Unfortunately, webfaction has disabled this functionality for security reasons in their servers as they are using suExec.</p>
+<h3>The solution</h3>
+<p>However, there is a solution to this problem. We can not extract the authentication detials form http headers but we can send them to php over url via internal redirect using <code>.htaccess</code> file. To achieve this, we need to insert the following rewrite condition to <code>.htaccess</code> file.</p>
+<div class="highlight"><pre><span class="nb">RewriteCond</span> %{HTTP:Authorization} ^Basic.*
+<span class="nb">RewriteRule</span> ^(.*) $1?Authorization=%{HTTP:Authorization} [QSA,C]
+<span class="nb">RequestHeader</span> unset Authorization
+</pre></div>
+
+
+<p>This rule passes the Authorization information from http <code>Authorization</code> header over a query string called <code>Authorization</code> and sends it to php. Once done, unset the header variable <code>Authorization</code> to prevent endless recursions.</p>
+<p>Now that we have set up rewrite rule to send authorization over http get, we can get it in php in $_GET super global array. We need to modify <code>lib/base.php</code> and insert the following code inside init() around line 508.</p>
+<div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="c1">// Get the authorization information from $_GET and use some regex</span>
+<span class="k">if</span><span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;Authorization&#39;</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="nb">preg_match</span><span class="p">(</span><span class="s1">&#39;/Basic\s+(.*)$/i&#39;</span><span class="p">,</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;Authorization&#39;</span><span class="p">],</span> <span class="nv">$matches</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">list</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nv">$password</span><span class="p">)</span> <span class="o">=</span> <span class="nb">explode</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="nb">base64_decode</span><span class="p">(</span><span class="nv">$matches</span><span class="p">[</span><span class="mi">1</span><span class="p">]));</span>
+    <span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;PHP_AUTH_USER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">strip_tags</span><span class="p">(</span><span class="nv">$name</span><span class="p">);</span>
+    <span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;PHP_AUTH_PW&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">strip_tags</span><span class="p">(</span><span class="nv">$password</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>Now the authorization information is properly handled by Owncloud 6.</p>
+<p>Here is a code diff of this change</p>
+<h3>.htaccess</h3>
+<div class="highlight"><pre><span class="gh">diff --git a/.htaccess b/.htaccess</span>
+<span class="gh">index 4ba5095..d86453c 100644</span>
+<span class="gd">--- a/.htaccess</span>
+<span class="gi">+++ b/.htaccess</span>
+<span class="gu">@@ -28,6 +28,11 @@ RewriteRule ^apps/calendar/caldav.php remote.php/caldav/ [QSA,L]</span>
+    RewriteRule ^apps/contacts/carddav.php remote.php/carddav/ [QSA,L]
+    RewriteRule ^apps/([^/]*)/(.*\.(php))$ index.php?app=$1&amp;getfile=$2 [QSA,L]
+    RewriteRule ^remote/(.*) remote.php [QSA,L]
+<span class="gi">+</span>
+<span class="gi">+# webfaction authorization fix for basic authentication</span>
+<span class="gi">+RewriteCond %{HTTP:Authorization} ^Basic.*</span>
+<span class="gi">+RewriteRule ^(.*) $1?Authorization=%{HTTP:Authorization} [QSA,C]</span>
+<span class="gi">+RequestHeader unset Authorization</span>
+    &lt;/IfModule&gt;
+    &lt;IfModule mod_mime.c&gt;
+    AddType image/svg+xml svg svgz
+</pre></div>
+
+
+<h3>lib/base.php</h3>
+<div class="highlight"><pre><span class="gh">diff --git a/lib/base.php b/lib/base.php</span>
+<span class="gh">index 3c06cc1..f8fbbf2 100644</span>
+<span class="gd">--- a/lib/base.php</span>
+<span class="gi">+++ b/lib/base.php</span>
+<span class="gu">@@ -505,6 +505,14 @@ class OC {</span>
+                $_SERVER[&#39;PHP_AUTH_PW&#39;] = strip_tags($password);
+            }
+
+<span class="gi">+               //set http auth headers for Webfaction workaround</span>
+<span class="gi">+               if(isset($_GET[&#39;Authorization&#39;]) &amp;&amp; preg_match(&#39;/Basic\s+(.*)$/i&#39;, $_GET[&#39;Authorization&#39;], $matches))</span>
+<span class="gi">+               {</span>
+<span class="gi">+                       list($name, $password) = explode(&#39;:&#39;, base64_decode($matches[1]));</span>
+<span class="gi">+                       $_SERVER[&#39;PHP_AUTH_USER&#39;] = strip_tags($name);</span>
+<span class="gi">+                       $_SERVER[&#39;PHP_AUTH_PW&#39;] = strip_tags($password);</span>
+<span class="gi">+               }</span>
+<span class="gi">+</span>
+                self::initPaths();
+                if (OC_Config::getValue(&#39;instanceid&#39;, false)) {
+                // \OC\Memcache\Cache has a hidden dependency on
+</pre></div></div>
+  <div>
+    <h2>Comments</h2>
+    <div id="disqus_thread"></div>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+</div>	
+            </div><!--/span-->
+
+	    <div class="span3">
+
+
+            </div><!--/span-->
+
+	  </div>
+	</div>
+      </div><!--/row-->
+
+      <hr>
+
+      <footer>
+        <p>Powered by <a href="http://alexis.notmyidea.org/pelican/">Pelican</a></p>
+	<p>&copy; Poomalairaj 2012</p>
+      </footer>
+
+    </div><!--/.fluid-container-->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="./theme/js/jquery-1.7.2.min.js"><\/script>')</script>
+    <script src="./theme/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./theme/js/modernizr-2.5.3-respond-1.1.0.min.js"></script>
+    <script type="text/javascript">
+	$(document.links).filter(function() {
+		    return this.hostname != window.location.hostname;
+	}).attr('target', '_blank');
+    </script>
+  </body>
+</html>

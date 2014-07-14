@@ -1,5 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Poomalairaj's weblog</title><link href="/" rel="alternate"></link><link href="/feeds/tech.atom.xml" rel="self"></link><id>/</id><updated>2013-06-07T14:14:00+05:30</updated><entry><title>What happens behind the scenes when you browse a webpage over Internet</title><link href="/behind-the-scenes-browsing-webpage.html" rel="alternate"></link><updated>2013-06-07T14:14:00+05:30</updated><author><name>Poomalairaj</name></author><id>tag:,2013-06-07:behind-the-scenes-browsing-webpage.html</id><summary type="html">&lt;h2&gt;Intro&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Poomalairaj's weblog</title><link href="/" rel="alternate"></link><link href="/feeds/tech.atom.xml" rel="self"></link><id>/</id><updated>2014-07-14T17:40:00+05:30</updated><entry><title>Authentication fix of Owncloud 6 for webfaction hosting</title><link href="/authentication-fix-owncloud6-webfaction.html" rel="alternate"></link><updated>2014-07-14T17:40:00+05:30</updated><author><name>Poomalairaj</name></author><id>tag:,2014-07-14:authentication-fix-owncloud6-webfaction.html</id><summary type="html">&lt;h3&gt;Owncloud and me&lt;/h3&gt;
+&lt;p&gt;I've been using owncloud ever since I switched to Nexus 4 from my beloved N900 since I didn't want to use google's services to store my contacts and calendars. Owncloud is a cool application to serve many of personal services like calendar, contacts, file sync, bookmarks, music etc. It becomes even cooler since you can sync/serve your data from your own infrastructure without relying on google or dropbox.&lt;/p&gt;
+&lt;p&gt;I've been using OC5 for a long time and couple of days ago, I decided to upgrade to OC6. While upgrading to OC6 I remembered that I did some code change in the OC's core files to fix something but I couldn't remember what it was. I finally convinced that it could be some weird bug in OC that was not fixed at that time and assuming that OC6 might have a fix for that, I just went on to upgrade to OC6. I did backup and upgraded to OC6. Everything went fine and I was able to login to OC6 from the browser.&lt;/p&gt;
+&lt;h3&gt;Basic Authentication &amp;amp; Webfaction&lt;/h3&gt;
+&lt;p&gt;I tried to sync my contacts in my Nexus 4 using &lt;a href="https://play.google.com/store/apps/details?id=org.dmfs.carddav.sync" title="CardDav-Sync free Beta"&gt;carddav sync free&lt;/a&gt; and I got authentication error. Ah! This was the problem, I thought. Tried to downgrade to OC5, reinstalled couple of times. Nothing worked. Tried to install OC6 on my laptop and Bingo! it works fine. So this must be a problem with Webfaction. I raised a support ticket with webfaction. As always webfaction guys responded immediately with a fine solution.&lt;/p&gt;
+&lt;p&gt;Basically, what Owncloud does is that it extracts the user name and password from HTTP header via mod_rewrite and provides it to PHP over environment variables. Unfortunately, webfaction has disabled this functionality for security reasons in their servers as they are using suExec.&lt;/p&gt;
+&lt;h3&gt;The solution&lt;/h3&gt;
+&lt;p&gt;However, there is a solution to this problem. We can not extract the authentication detials form http headers but we can send them to php over url via internal redirect using &lt;code&gt;.htaccess&lt;/code&gt; file. To achieve this, we need to insert the following rewrite condition to &lt;code&gt;.htaccess&lt;/code&gt; file.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nb"&gt;RewriteCond&lt;/span&gt; %{HTTP:Authorization} ^Basic.*
+&lt;span class="nb"&gt;RewriteRule&lt;/span&gt; ^(.*) $1?Authorization=%{HTTP:Authorization} [QSA,C]
+&lt;span class="nb"&gt;RequestHeader&lt;/span&gt; unset Authorization
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This rule passes the Authorization information from http &lt;code&gt;Authorization&lt;/code&gt; header over a query string called &lt;code&gt;Authorization&lt;/code&gt; and sends it to php. Once done, unset the header variable &lt;code&gt;Authorization&lt;/code&gt; to prevent endless recursions.&lt;/p&gt;
+&lt;p&gt;Now that we have set up rewrite rule to send authorization over http get, we can get it in php in $_GET super global array. We need to modify &lt;code&gt;lib/base.php&lt;/code&gt; and insert the following code inside init() around line 508.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="cp"&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class="c1"&gt;// Get the authorization information from $_GET and use some regex&lt;/span&gt;
+&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;isset&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$_GET&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Authorization&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="nb"&gt;preg_match&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;/Basic\s+(.*)$/i&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nv"&gt;$_GET&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Authorization&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="nv"&gt;$matches&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;list&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$name&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nv"&gt;$password&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;explode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;:&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nb"&gt;base64_decode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$matches&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]));&lt;/span&gt;
+    &lt;span class="nv"&gt;$_SERVER&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;PHP_AUTH_USER&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;strip_tags&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$name&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="nv"&gt;$_SERVER&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;PHP_AUTH_PW&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;strip_tags&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$password&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now the authorization information is properly handled by Owncloud 6.&lt;/p&gt;
+&lt;p&gt;Here is a code diff of this change&lt;/p&gt;
+&lt;h3&gt;.htaccess&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="gh"&gt;diff --git a/.htaccess b/.htaccess&lt;/span&gt;
+&lt;span class="gh"&gt;index 4ba5095..d86453c 100644&lt;/span&gt;
+&lt;span class="gd"&gt;--- a/.htaccess&lt;/span&gt;
+&lt;span class="gi"&gt;+++ b/.htaccess&lt;/span&gt;
+&lt;span class="gu"&gt;@@ -28,6 +28,11 @@ RewriteRule ^apps/calendar/caldav.php remote.php/caldav/ [QSA,L]&lt;/span&gt;
+    RewriteRule ^apps/contacts/carddav.php remote.php/carddav/ [QSA,L]
+    RewriteRule ^apps/([^/]*)/(.*\.(php))$ index.php?app=$1&amp;amp;getfile=$2 [QSA,L]
+    RewriteRule ^remote/(.*) remote.php [QSA,L]
+&lt;span class="gi"&gt;+&lt;/span&gt;
+&lt;span class="gi"&gt;+# webfaction authorization fix for basic authentication&lt;/span&gt;
+&lt;span class="gi"&gt;+RewriteCond %{HTTP:Authorization} ^Basic.*&lt;/span&gt;
+&lt;span class="gi"&gt;+RewriteRule ^(.*) $1?Authorization=%{HTTP:Authorization} [QSA,C]&lt;/span&gt;
+&lt;span class="gi"&gt;+RequestHeader unset Authorization&lt;/span&gt;
+    &amp;lt;/IfModule&amp;gt;
+    &amp;lt;IfModule mod_mime.c&amp;gt;
+    AddType image/svg+xml svg svgz
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;lib/base.php&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="gh"&gt;diff --git a/lib/base.php b/lib/base.php&lt;/span&gt;
+&lt;span class="gh"&gt;index 3c06cc1..f8fbbf2 100644&lt;/span&gt;
+&lt;span class="gd"&gt;--- a/lib/base.php&lt;/span&gt;
+&lt;span class="gi"&gt;+++ b/lib/base.php&lt;/span&gt;
+&lt;span class="gu"&gt;@@ -505,6 +505,14 @@ class OC {&lt;/span&gt;
+                $_SERVER[&amp;#39;PHP_AUTH_PW&amp;#39;] = strip_tags($password);
+            }
+
+&lt;span class="gi"&gt;+               //set http auth headers for Webfaction workaround&lt;/span&gt;
+&lt;span class="gi"&gt;+               if(isset($_GET[&amp;#39;Authorization&amp;#39;]) &amp;amp;&amp;amp; preg_match(&amp;#39;/Basic\s+(.*)$/i&amp;#39;, $_GET[&amp;#39;Authorization&amp;#39;], $matches))&lt;/span&gt;
+&lt;span class="gi"&gt;+               {&lt;/span&gt;
+&lt;span class="gi"&gt;+                       list($name, $password) = explode(&amp;#39;:&amp;#39;, base64_decode($matches[1]));&lt;/span&gt;
+&lt;span class="gi"&gt;+                       $_SERVER[&amp;#39;PHP_AUTH_USER&amp;#39;] = strip_tags($name);&lt;/span&gt;
+&lt;span class="gi"&gt;+                       $_SERVER[&amp;#39;PHP_AUTH_PW&amp;#39;] = strip_tags($password);&lt;/span&gt;
+&lt;span class="gi"&gt;+               }&lt;/span&gt;
+&lt;span class="gi"&gt;+&lt;/span&gt;
+                self::initPaths();
+                if (OC_Config::getValue(&amp;#39;instanceid&amp;#39;, false)) {
+                // \OC\Memcache\Cache has a hidden dependency on
+&lt;/pre&gt;&lt;/div&gt;</summary><category term="owncloud"></category><category term="php"></category></entry><entry><title>What happens behind the scenes when you browse a webpage over Internet</title><link href="/behind-the-scenes-browsing-webpage.html" rel="alternate"></link><updated>2013-06-07T14:14:00+05:30</updated><author><name>Poomalairaj</name></author><id>tag:,2013-06-07:behind-the-scenes-browsing-webpage.html</id><summary type="html">&lt;h2&gt;Intro&lt;/h2&gt;
 &lt;p&gt;I can see that people are very interested to know what happens behind the scenes when they browse a webpage over Internet. Some of my friends keep on asking me to explain the whole process more than one time. Though I found some of the explanations on the Internet, nothing seems to be explaining the process in depth. So, I decided to write my own version. Hope this might help some.&lt;/p&gt;
 &lt;p&gt;When you try to explain the background processes that happen when you visit a page, you can explain it with different levels of accuracies. It can be as simple as saying, "Enter a url in the browser and you get the page you want" or it can be a very long blog post. I chose the second option and I will try to cover as much details as I can.&lt;/p&gt;
 &lt;h2&gt;Browser&lt;/h2&gt;
