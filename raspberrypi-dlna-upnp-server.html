@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <title>Poomalairaj's weblog</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Poomalairaj">
+
+    <!-- Le styles -->
+    <link href="./theme/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+          padding-top: 60px;
+          padding-bottom: 40px;
+      }
+      .sidebar-nav {
+          padding: 9px 0;
+      }
+    </style>
+    <link href="./theme/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="./theme/local.css" rel="stylesheet">
+    <link href="./theme/pygments.css" rel="stylesheet">
+<script>if(document.location.href.indexOf('github')==-1){ga_id='UA-30309581-1'}else{ga_id='UA-41310292-1'} var _gaq=[['_setAccount', ga_id],['_trackPageview']];(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.src='//www.google-analytics.com/ga.js';s.parentNode.insertBefore(g,s)}(document,'script'))</script>
+<script type="text/javascript">
+  var disqus_shortname = "poomalairaj"; // required: replace example with your forum shortname
+  var disqus_developer = 1;
+  
+  var disqus_identifier = "raspberrypi-dlna-upnp-server.html";
+  (function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+
+  (function () {
+  var s = document.createElement('script'); s.async = true;
+  s.type = 'text/javascript';
+  s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  }());
+</script>
+  </head>
+  <body>
+<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+    
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container-fluid">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+	<span class="icon-bar"></span>
+	<span class="icon-bar"></span>
+	<span class="icon-bar"></span>
+      </a>
+      <a class="brand" href="./index.html">Poomalairaj's weblog</a>
+      <div class="nav-collapse collapse">
+	<ul class="nav">
+	  <li><a href="./pages/about-me.html">About Me</a></li>
+	  <li class="active"><a href="./category/tech.html">Tech</a></li>
+	</ul>
+	<p class="navbar-text pull-right">
+	  <a class="navbar-link" href="./archives.html">[archives]</a>
+	  <a class="navbar-link" href="./tags.html">[tags]</a>
+	</p>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+</div>
+    <div class="container-fluid">
+      <div class="row-fluid">
+	<div class="span1">&nbsp;</div>
+	<div class="span10">
+	  <div class="row-fluid">
+            <div class="span9">
+<div class='article'>
+  <div class="page-header"><h1>Raspberry Pi as DLNA/UPnP media server + WIFI to Wired Ethernet NAT</h1></div>
+  <div class="well small"><a class="more" href="./raspberrypi-dlna-upnp-server.html">On 19 Aug 2014 at 13:55</a>
+by <a class="url fn" href="./author/poomalairaj.html">Poomalairaj</a> in <a href="./category/tech.html">Tech</a>
+ | <a href="./raspberrypi-dlna-upnp-server.html#disqus_thread">Comments</a></div>
+  <div><h3>Need for a media server</h3>
+<p>I have lot of media files spread across many devices in my home. I have photos, videos, movies and music files stored in laptop, desktop, android phones and Nexus 7 tablet. It is frustrating to find that the video I want to watch is stored in desktop when I try to access it from my Nexus 4. This happens all the time. I have to search for data cable to copy the file from one device to another.</p>
+<p>Another thing is that the mobile devices are limited in memory. I have to delete files every now and then just to copy new files. How would it be if I can put all my media files in a single location and access them from all the devices in my home? I've got a Raspberry Pi as a gift. The Pi is a natural fit for any project that needs a computer to be running all the time without consuming much power. So I decided to do this project with my Raspberry Pi.</p>
+<h3>What I needed</h3>
+<p>A DLNA/UPnP server which can serve photos, videos and audio. A DHCP/DNS Server which can be used as ad blocking DNS server. The server should always be on.</p>
+<p><img alt="Raspberry Pi" src="/static/img/rpi-minidlna/rpi.jpg" title="Raspberry Pi Model B" /></p>
+<h4>The Hardware</h4>
+<ul>
+<li>The computer - Raspberry Pi (Model B 512 MB RAM)</li>
+<li>USB Wifi adaptor - COMFAST 150 Mbps wifi dongle</li>
+<li>SD card - Strontium 16 GB micro SD with SD adaptor</li>
+<li>Power supply - DC - DC power supply board from Ebay</li>
+<li>Ethernet cables</li>
+<li>Netgear Router</li>
+</ul>
+<h4>Software</h4>
+<ul>
+<li>Arch Linux for Arm</li>
+<li>minidlna</li>
+<li>dnsmasq</li>
+</ul>
+<h3>Why I needed NAT</h3>
+<p>I have a <a href="http://blog.johnsiraani.com/data-card-review-huaweie8231/">Huawei E8231</a> 3G modem. The modem has built-in wifi hotspot so I am running the modem all the time and it is the gateway of internet for all the devices in my home. At first I tried to install minidlna and served it on my data card's network. It turned out that my datacard's LAN is too slow to serve HD movies. Then I tried to connect Raspberry Pi to my Netgear router which also has wifi. Now I am getting a decent speed.</p>
+<p><img alt="Netgear wifi router" src="/static/img/rpi-minidlna/netgear.jpg" title="Netgear wifi router" /></p>
+<p>Now the problem is that Netgear router doesn't have Internet connection. It is just connected to power and Raspberry Pi. This makes all other devices connected to Netgear's network not able to be connected to Internet. If I can make Raspberry Pi as a router, I can forward Internet packets from usb wifi to the Ethernet port of Raspberry Pi. Simple <code>iptables</code> rules could make Raspberry Pi as a NAT and Internet is supplied to the Netgear router. Thus all the devices connected to Netgear can access Internet as well as UPnP media service. As a positive side effect, this setup extended the range of my home wifi connection.</p>
+<h3>Power Supply</h3>
+<p>In Chennai, we have frequent power outages. I decided to use a dc-dc power supply board (can be bought from ebay for as cheap as Rs. 200) with my UPS battery. The UPS battery is 12 volts and the DC-DC power supply board can supply up to 2A current which is enough to run Raspberry Pi without any problems. I directly connected the 12v supply from battery to the power supply board and took 5v output to Raspberry Pi through USB cable.</p>
+<p>I also connected a molex connector to the power supply board so that I can use it in the future with my internal HDD with this power supply (of course with a PATA/SATA to USB bridge). I used a spare food container as a box for the power supply and connected a USB cable. Now the power supply is ready.</p>
+<p><strong>Here is my DC-DC Power supply inside a food container box</strong></p>
+<p><img alt="DC-DC Power Supply 1" src="/static/img/rpi-minidlna/dc-dc-power-board-1.jpg" title="DC-DC Power Supply" /></p>
+<p><img alt="DC-DC Power Supply 2" src="/static/img/rpi-minidlna/dc-dc-power-board-2.jpg" /></p>
+<p><img alt="USB cable" src="/static/img/rpi-minidlna/usb-cable.jpg" title="USB Cable" /></p>
+<h3>Network addresses</h3>
+<p>Following are the network addresses for the setup.</p>
+<ul>
+<li>Huawei data card ip address - 192.168.8.1 (IP range 192.168.8.1 to 192.168.8.150)</li>
+<li>Raspberry Pi wlan0 - 192.168.8.30 (statically set in netctl profile)</li>
+<li>Raspberry Pi eth0 - 192.168.0.30 (statically set in netctl profile and acts as NAT)</li>
+</ul>
+<p>Raspberry Pi receives internet connection from data card and forward the Internet to ethernet port. The ethernet port is connected to Netgear router. Please note that the cable from RPi <em>should not</em> be connected to the internet port of the Netgear router. If you do, the router will act as a router and it provides its own IP range to the clients connected to it which is not desired.</p>
+<p>Because I want to have Raspberry Pi and all devices in home in the same network. In my case, the internet port is Yellow color and 4 client ports are black (Have a look the router image above). The cable from RPi should be connected to one of the black colored client port (i.e., non Internet Port) 
+Essentially we are using Netgear router as a wireless switch instead of <em>router</em>. I also diasbled DHCP server in the router. The DHCP/DNS server runs in Raspberry Pi will take care of assigning ip addresses and resolving names.</p>
+<h3>The setup</h3>
+<h4>Install Arch Linux Arm</h4>
+<p><img alt="Strontium 16GB microSD card" src="/static/img/rpi-minidlna/sd-card.jpg" /></p>
+<p>Insert the SD card to your PC and find the device name using <code>lsblk</code>. In my case the device was <code>/dev/sdb</code>.
+Use <code>dd</code> to write the Arch Linux image to the SD card</p>
+<div class="highlight"><pre>dd <span class="nv">bs</span><span class="o">=</span>4M <span class="k">if</span><span class="o">=</span>ArchLinuxARM-2014.06-rpi.img <span class="nv">of</span><span class="o">=</span>/dev/sdb
+</pre></div>
+
+
+<p>It might take some time and once it is done writing the image to the card, Remove the SD card from PC and insert it to Raspberry Pi SD card slot.
+Connect HDMI port to display. Insert USB wifi adaptor and keyboard to the USB ports. Connect the power supply. In a few seconds Arch Linux should boot and ready for login.</p>
+<p>Login to Arch Linux with the username <code>root</code> and password <code>root</code>. </p>
+<h4>Wifi settings</h4>
+<p><img alt="ComFast mini wifi USB dongle" src="/static/img/rpi-minidlna/wifi.jpg" /></p>
+<p>Let's setup wifi. Edit the file <code>/etc/netctl/wifi</code> with the following contents</p>
+<div class="highlight"><pre><span class="nv">Description</span><span class="o">=</span><span class="s1">&#39;Home wifi network&#39;</span>
+<span class="nv">Interface</span><span class="o">=</span>wlan0
+<span class="nv">Connection</span><span class="o">=</span>wireless
+<span class="nv">Security</span><span class="o">=</span>wpa
+<span class="nv">ESSID</span><span class="o">=</span><span class="s1">&#39;xxxxx&#39;</span>
+<span class="nv">Key</span><span class="o">=</span><span class="s1">&#39;yyyyy&#39;</span>
+<span class="nv">IP</span><span class="o">=</span>static
+<span class="nv">Address</span><span class="o">=</span><span class="s1">&#39;192.168.8.30/24&#39;</span>
+<span class="nv">Gateway</span><span class="o">=</span><span class="s1">&#39;192.168.8.1&#39;</span>
+<span class="nv">DNS</span><span class="o">=(</span><span class="s1">&#39;192.168.8.1&#39;</span><span class="o">)</span>
+<span class="nv">ExecUpPost</span><span class="o">=</span><span class="s1">&#39;/usr/bin/ntpd -gq || true&#39;</span>
+</pre></div>
+
+
+<p>Start wifi profile with netctl and enable it so that it loads on startup</p>
+<div class="highlight"><pre>netctl start wifi
+netctl <span class="nb">enable </span>wifi
+</pre></div>
+
+
+<h4>Ethernet settings</h4>
+<p>Edit the file <code>/etc/netctl/eth0</code> with the following contents</p>
+<div class="highlight"><pre><span class="nv">Description</span><span class="o">=</span><span class="s1">&#39;static ethernet connection acts as NAT&#39;</span>
+<span class="nv">Interface</span><span class="o">=</span>eth0
+<span class="nv">Connection</span><span class="o">=</span>ethernet
+<span class="nv">IP</span><span class="o">=</span>static
+<span class="nv">Address</span><span class="o">=(</span><span class="s1">&#39;192.168.0.30/24&#39;</span><span class="o">)</span>
+<span class="nv">DNS</span><span class="o">=(</span><span class="s1">&#39;192.168.0.30&#39;</span><span class="o">)</span>
+</pre></div>
+
+
+<p>Execute <code>ifconfig</code> and make sure that the ip of the interface <code>wlan0</code> is set to <code>192.168.8.30</code>.</p>
+<p>Update packages and install <code>dnsmasq</code></p>
+<div class="highlight"><pre>pacman -Sy
+pacman -S dnsmasq
+</pre></div>
+
+
+<p>Configuration of dnsmasq <code>/etc/dnsmasq.conf</code></p>
+<div class="highlight"><pre>domain-needed
+bogus-priv
+resolv-file<span class="o">=</span>/etc/resolv.dnsmasq.conf
+<span class="nv">interface</span><span class="o">=</span>eth0
+addn-hosts<span class="o">=</span>/etc/ad_block_hosts
+dhcp-range<span class="o">=</span>192.168.0.50,192.168.0.150
+dhcp-host<span class="o">=</span>00:11:22:33:44:55,compaq,192.168.0.50
+dhcp-host<span class="o">=</span>00:11:22:33:44:55,nexus1,192.168.0.51
+dhcp-host<span class="o">=</span>00:11:22:33:44:55,moto1,192.168.0.52
+dhcp-host<span class="o">=</span>00:11:22:33:44:55,moto2,192.168.0.53
+dhcp-host<span class="o">=</span>00:11:22:33:44:55,nexus2,192.168.0.54
+dhcp-host<span class="o">=</span>00:11:22:33:44:55,dell,192.168.0.55
+cache-size<span class="o">=</span>1500
+</pre></div>
+
+
+<p>Edit <code>/etc/resolv.dnsmasq.conf</code> with following contents</p>
+<div class="highlight"><pre>nameserver 8.8.8.8
+nameserver 8.8.4.4
+</pre></div>
+
+
+<p>I have also added ad blocking hosts file with dnsmasq so that ads will be blocked on my mobile devices. I downloaded one from http://winhelp2002.mvps.org/hosts.htm and moved the hosts file to <code>/etc/ad_block_hosts</code>. Replaced all <code>0.0.0.0</code> with '192.168.0.30`</p>
+<p>Start and enable dnsmasq</p>
+<div class="highlight"><pre>systemctl start dnsmasq
+systemctl <span class="nb">enable </span>dnsmasq
+</pre></div>
+
+
+<h3>Setting up NAT to forward Internet to eth0</h3>
+<p>First enable ip forwarding</p>
+<div class="highlight"><pre>sysctl net.ipv4.ip_forward<span class="o">=</span>1
+</pre></div>
+
+
+<p>To set ip forwarding permanently, edit <code>/etc/sysctl.d/30-ipforward.conf</code> with the contents</p>
+<div class="highlight"><pre><span class="n">net</span><span class="p">.</span><span class="n">ipv4</span><span class="p">.</span><span class="n">ip_forward</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">net</span><span class="p">.</span><span class="n">ipv6</span><span class="p">.</span><span class="n">conf</span><span class="p">.</span><span class="k">default</span><span class="p">.</span><span class="n">forwarding</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">net</span><span class="p">.</span><span class="n">ipv6</span><span class="p">.</span><span class="n">conf</span><span class="p">.</span><span class="n">all</span><span class="p">.</span><span class="n">forwarding</span><span class="o">=</span><span class="mi">1</span>
+</pre></div>
+
+
+<p>To setup NAT I used iptables</p>
+<div class="highlight"><pre>iptables -t nat -A POSTROUTING -o wlan0 -j MASQUERADE
+iptables -A FORWARD -i wlan0 -o eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -A FORWARD -i eth0 -o wlan0 -j ACCEPT
+</pre></div>
+
+
+<p>To make these rules active upon rebooting, save the rules to <code>/etc/iptables/iptables.rules</code></p>
+<div class="highlight"><pre>iptables-save &gt; /etc/iptables/iptables.rules
+systemctl <span class="nb">enable </span>iptables.service
+</pre></div>
+
+
+<h3>Setup user account</h3>
+<p>I installed sudo and created a new user called <code>pi</code>. The new user is added to wheel group so that I can use <code>sudo</code></p>
+<div class="highlight"><pre>pacman -S sudo
+useradd -s /bin/bash -m -g wheel pi
+passwd pi
+<span class="nb">echo</span> <span class="s2">&quot;pi&quot;</span> &gt; /etc/hostname
+hostname pi
+</pre></div>
+
+
+<h3>Setup minidlna</h3>
+<div class="highlight"><pre><span class="c"># Install minidlna</span>
+pacman -S minidlna
+
+<span class="c"># Change permissions of minidlna logs and db</span>
+sudo chown pi minidlna
+sudo chown pi minidlna.log
+</pre></div>
+
+
+<p>Edit <code>/etc/minidlna.conf</code> with following </p>
+<div class="highlight"><pre><span class="c"># Media directories from USB flash drive / HDD</span>
+<span class="nv">media_dir</span><span class="o">=</span>V,/mnt/movies
+<span class="nv">media_dir</span><span class="o">=</span>V,/mnt/videos
+<span class="nv">media_dir</span><span class="o">=</span>V,/mnt/videosongs
+<span class="nv">media_dir</span><span class="o">=</span>A,/mnt/music
+<span class="nv">media_dir</span><span class="o">=</span>P,/mnt/photos
+
+<span class="nv">db_dir</span><span class="o">=</span>/var/lib/minidlna
+<span class="nv">log_dir</span><span class="o">=</span>/var/log
+<span class="nv">port</span><span class="o">=</span>8200
+<span class="nv">friendly_name</span><span class="o">=</span>Raspberry Pi UPnP
+<span class="nv">serial</span><span class="o">=</span>12345678
+<span class="nv">model_number</span><span class="o">=</span>1
+<span class="nv">album_art_names</span><span class="o">=</span>Cover.jpg/cover.jpg/AlbumArtSmall.jpg/albumartsmall.jpg/AlbumArt.jpg/albumart.jpg/Album.jpg/album.jpg/Folder.jpg/folder.jpg/Thumb.jpg/thumb.jpg
+</pre></div>
+
+
+<p>Start and enable minidlna on startup</p>
+<div class="highlight"><pre>sudo systemctl start minidlna
+sudo systemctl <span class="nb">enable </span>minidlna
+</pre></div>
+
+
+<h3>Reboot</h3>
+<p>Now it's time to reboot the Pi.</p>
+<div class="highlight"><pre>systemctl halt
+</pre></div>
+
+
+<p>I had a 16 GB pendrive lying around. For now it should be enough to test the installation. In the future I am going to buy a external USB HDD. In my case the usb flash drive is /dev/sda1 and the drive is formatted to ext4</p>
+<p>Unplug from monitor and remove HDMI cable. Remove keyboard and insert USB flash drive. I placed the pi near my battery and connected it to the powersupply.
+If everything is fine, the pi should boot up and connect to Huawei data card wifi network. It should act as a DHCP server and assign ip addresses to the client devices connected to the netgear router.</p>
+<h3>Mount USB HDD</h3>
+<p>Connect to Netgear's wifi and connect to pi using ssh</p>
+<div class="highlight"><pre>ssh pi@192.168.0.30
+
+<span class="c"># mount it at /mnt</span>
+mount /dev/sda1 /mnt
+</pre></div>
+
+
+<p>To make the mount permanent, edit <code>/etc/fstab</code> with the following content</p>
+<div class="highlight"><pre><span class="n">UUID</span><span class="o">=</span><span class="s">&quot;88ac72a4-7324-8a85&quot;</span> <span class="o">/</span><span class="n">mnt</span> <span class="n">ext3</span> <span class="n">defaults</span><span class="p">,</span><span class="n">uid</span><span class="o">=</span><span class="n">pi</span> <span class="mi">0</span> <span class="mi">0</span>
+</pre></div>
+
+
+<p>Now I opened up my laptop and connected to <code>media</code> network. Fired up vlc. <code>ctrl + L</code> to open playlist. Under 'local Network' section, find <code>Universal Plug'n'Play</code>. It should show the Raspberry Pi minidlna server name. You can play movies and music under it.</p>
+<p>For mobile devices, I'm using Bubbleupnp which itself is a upnp server. For my purposes, it is enough to have upnp client. So I have disabled local media server in bubbleupnp.</p></div>
+  <div>
+    <h2>Comments</h2>
+    <div id="disqus_thread"></div>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+</div>	
+            </div><!--/span-->
+
+	    <div class="span3">
+
+
+            </div><!--/span-->
+
+	  </div>
+	</div>
+      </div><!--/row-->
+
+      <hr>
+
+      <footer>
+        <p>Powered by <a href="http://alexis.notmyidea.org/pelican/">Pelican</a></p>
+	<p>&copy; Poomalairaj 2012</p>
+      </footer>
+
+    </div><!--/.fluid-container-->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="./theme/js/jquery-1.7.2.min.js"><\/script>')</script>
+    <script src="./theme/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./theme/js/modernizr-2.5.3-respond-1.1.0.min.js"></script>
+    <script type="text/javascript">
+	$(document.links).filter(function() {
+		    return this.hostname != window.location.hostname;
+	}).attr('target', '_blank');
+    </script>
+  </body>
+</html>

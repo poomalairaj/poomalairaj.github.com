@@ -1,5 +1,224 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Poomalairaj's weblog</title><link href="/" rel="alternate"></link><link href="/feeds/poomalairaj.atom.xml" rel="self"></link><id>/</id><updated>2014-07-14T17:40:00+05:30</updated><entry><title>Authentication fix of Owncloud 6 for webfaction hosting</title><link href="/authentication-fix-owncloud6-webfaction.html" rel="alternate"></link><updated>2014-07-14T17:40:00+05:30</updated><author><name>Poomalairaj</name></author><id>tag:,2014-07-14:authentication-fix-owncloud6-webfaction.html</id><summary type="html">&lt;h3&gt;Owncloud and me&lt;/h3&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Poomalairaj's weblog</title><link href="/" rel="alternate"></link><link href="/feeds/poomalairaj.atom.xml" rel="self"></link><id>/</id><updated>2014-08-19T13:55:00+05:30</updated><entry><title>Raspberry Pi as DLNA/UPnP media server + WIFI to Wired Ethernet NAT</title><link href="/raspberrypi-dlna-upnp-server.html" rel="alternate"></link><updated>2014-08-19T13:55:00+05:30</updated><author><name>Poomalairaj</name></author><id>tag:,2014-08-19:raspberrypi-dlna-upnp-server.html</id><summary type="html">&lt;h3&gt;Need for a media server&lt;/h3&gt;
+&lt;p&gt;I have lot of media files spread across many devices in my home. I have photos, videos, movies and music files stored in laptop, desktop, android phones and Nexus 7 tablet. It is frustrating to find that the video I want to watch is stored in desktop when I try to access it from my Nexus 4. This happens all the time. I have to search for data cable to copy the file from one device to another.&lt;/p&gt;
+&lt;p&gt;Another thing is that the mobile devices are limited in memory. I have to delete files every now and then just to copy new files. How would it be if I can put all my media files in a single location and access them from all the devices in my home? I've got a Raspberry Pi as a gift. The Pi is a natural fit for any project that needs a computer to be running all the time without consuming much power. So I decided to do this project with my Raspberry Pi.&lt;/p&gt;
+&lt;h3&gt;What I needed&lt;/h3&gt;
+&lt;p&gt;A DLNA/UPnP server which can serve photos, videos and audio. A DHCP/DNS Server which can be used as ad blocking DNS server. The server should always be on.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Raspberry Pi" src="/static/img/rpi-minidlna/rpi.jpg" title="Raspberry Pi Model B" /&gt;&lt;/p&gt;
+&lt;h4&gt;The Hardware&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;The computer - Raspberry Pi (Model B 512 MB RAM)&lt;/li&gt;
+&lt;li&gt;USB Wifi adaptor - COMFAST 150 Mbps wifi dongle&lt;/li&gt;
+&lt;li&gt;SD card - Strontium 16 GB micro SD with SD adaptor&lt;/li&gt;
+&lt;li&gt;Power supply - DC - DC power supply board from Ebay&lt;/li&gt;
+&lt;li&gt;Ethernet cables&lt;/li&gt;
+&lt;li&gt;Netgear Router&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;Software&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;Arch Linux for Arm&lt;/li&gt;
+&lt;li&gt;minidlna&lt;/li&gt;
+&lt;li&gt;dnsmasq&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Why I needed NAT&lt;/h3&gt;
+&lt;p&gt;I have a &lt;a href="http://blog.johnsiraani.com/data-card-review-huaweie8231/"&gt;Huawei E8231&lt;/a&gt; 3G modem. The modem has built-in wifi hotspot so I am running the modem all the time and it is the gateway of internet for all the devices in my home. At first I tried to install minidlna and served it on my data card's network. It turned out that my datacard's LAN is too slow to serve HD movies. Then I tried to connect Raspberry Pi to my Netgear router which also has wifi. Now I am getting a decent speed.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Netgear wifi router" src="/static/img/rpi-minidlna/netgear.jpg" title="Netgear wifi router" /&gt;&lt;/p&gt;
+&lt;p&gt;Now the problem is that Netgear router doesn't have Internet connection. It is just connected to power and Raspberry Pi. This makes all other devices connected to Netgear's network not able to be connected to Internet. If I can make Raspberry Pi as a router, I can forward Internet packets from usb wifi to the Ethernet port of Raspberry Pi. Simple &lt;code&gt;iptables&lt;/code&gt; rules could make Raspberry Pi as a NAT and Internet is supplied to the Netgear router. Thus all the devices connected to Netgear can access Internet as well as UPnP media service. As a positive side effect, this setup extended the range of my home wifi connection.&lt;/p&gt;
+&lt;h3&gt;Power Supply&lt;/h3&gt;
+&lt;p&gt;In Chennai, we have frequent power outages. I decided to use a dc-dc power supply board (can be bought from ebay for as cheap as Rs. 200) with my UPS battery. The UPS battery is 12 volts and the DC-DC power supply board can supply up to 2A current which is enough to run Raspberry Pi without any problems. I directly connected the 12v supply from battery to the power supply board and took 5v output to Raspberry Pi through USB cable.&lt;/p&gt;
+&lt;p&gt;I also connected a molex connector to the power supply board so that I can use it in the future with my internal HDD with this power supply (of course with a PATA/SATA to USB bridge). I used a spare food container as a box for the power supply and connected a USB cable. Now the power supply is ready.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Here is my DC-DC Power supply inside a food container box&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="DC-DC Power Supply 1" src="/static/img/rpi-minidlna/dc-dc-power-board-1.jpg" title="DC-DC Power Supply" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="DC-DC Power Supply 2" src="/static/img/rpi-minidlna/dc-dc-power-board-2.jpg" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="USB cable" src="/static/img/rpi-minidlna/usb-cable.jpg" title="USB Cable" /&gt;&lt;/p&gt;
+&lt;h3&gt;Network addresses&lt;/h3&gt;
+&lt;p&gt;Following are the network addresses for the setup.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Huawei data card ip address - 192.168.8.1 (IP range 192.168.8.1 to 192.168.8.150)&lt;/li&gt;
+&lt;li&gt;Raspberry Pi wlan0 - 192.168.8.30 (statically set in netctl profile)&lt;/li&gt;
+&lt;li&gt;Raspberry Pi eth0 - 192.168.0.30 (statically set in netctl profile and acts as NAT)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Raspberry Pi receives internet connection from data card and forward the Internet to ethernet port. The ethernet port is connected to Netgear router. Please note that the cable from RPi &lt;em&gt;should not&lt;/em&gt; be connected to the internet port of the Netgear router. If you do, the router will act as a router and it provides its own IP range to the clients connected to it which is not desired.&lt;/p&gt;
+&lt;p&gt;Because I want to have Raspberry Pi and all devices in home in the same network. In my case, the internet port is Yellow color and 4 client ports are black (Have a look the router image above). The cable from RPi should be connected to one of the black colored client port (i.e., non Internet Port) 
+Essentially we are using Netgear router as a wireless switch instead of &lt;em&gt;router&lt;/em&gt;. I also diasbled DHCP server in the router. The DHCP/DNS server runs in Raspberry Pi will take care of assigning ip addresses and resolving names.&lt;/p&gt;
+&lt;h3&gt;The setup&lt;/h3&gt;
+&lt;h4&gt;Install Arch Linux Arm&lt;/h4&gt;
+&lt;p&gt;&lt;img alt="Strontium 16GB microSD card" src="/static/img/rpi-minidlna/sd-card.jpg" /&gt;&lt;/p&gt;
+&lt;p&gt;Insert the SD card to your PC and find the device name using &lt;code&gt;lsblk&lt;/code&gt;. In my case the device was &lt;code&gt;/dev/sdb&lt;/code&gt;.
+Use &lt;code&gt;dd&lt;/code&gt; to write the Arch Linux image to the SD card&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;dd &lt;span class="nv"&gt;bs&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;4M &lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;ArchLinuxARM-2014.06-rpi.img &lt;span class="nv"&gt;of&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/dev/sdb
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;It might take some time and once it is done writing the image to the card, Remove the SD card from PC and insert it to Raspberry Pi SD card slot.
+Connect HDMI port to display. Insert USB wifi adaptor and keyboard to the USB ports. Connect the power supply. In a few seconds Arch Linux should boot and ready for login.&lt;/p&gt;
+&lt;p&gt;Login to Arch Linux with the username &lt;code&gt;root&lt;/code&gt; and password &lt;code&gt;root&lt;/code&gt;. &lt;/p&gt;
+&lt;h4&gt;Wifi settings&lt;/h4&gt;
+&lt;p&gt;&lt;img alt="ComFast mini wifi USB dongle" src="/static/img/rpi-minidlna/wifi.jpg" /&gt;&lt;/p&gt;
+&lt;p&gt;Let's setup wifi. Edit the file &lt;code&gt;/etc/netctl/wifi&lt;/code&gt; with the following contents&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;Description&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Home wifi network&amp;#39;&lt;/span&gt;
+&lt;span class="nv"&gt;Interface&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;wlan0
+&lt;span class="nv"&gt;Connection&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;wireless
+&lt;span class="nv"&gt;Security&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;wpa
+&lt;span class="nv"&gt;ESSID&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;xxxxx&amp;#39;&lt;/span&gt;
+&lt;span class="nv"&gt;Key&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;yyyyy&amp;#39;&lt;/span&gt;
+&lt;span class="nv"&gt;IP&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;static
+&lt;span class="nv"&gt;Address&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;192.168.8.30/24&amp;#39;&lt;/span&gt;
+&lt;span class="nv"&gt;Gateway&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;192.168.8.1&amp;#39;&lt;/span&gt;
+&lt;span class="nv"&gt;DNS&lt;/span&gt;&lt;span class="o"&gt;=(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;192.168.8.1&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="nv"&gt;ExecUpPost&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;/usr/bin/ntpd -gq || true&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Start wifi profile with netctl and enable it so that it loads on startup&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;netctl start wifi
+netctl &lt;span class="nb"&gt;enable &lt;/span&gt;wifi
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h4&gt;Ethernet settings&lt;/h4&gt;
+&lt;p&gt;Edit the file &lt;code&gt;/etc/netctl/eth0&lt;/code&gt; with the following contents&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;Description&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;static ethernet connection acts as NAT&amp;#39;&lt;/span&gt;
+&lt;span class="nv"&gt;Interface&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;eth0
+&lt;span class="nv"&gt;Connection&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;ethernet
+&lt;span class="nv"&gt;IP&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;static
+&lt;span class="nv"&gt;Address&lt;/span&gt;&lt;span class="o"&gt;=(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;192.168.0.30/24&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="nv"&gt;DNS&lt;/span&gt;&lt;span class="o"&gt;=(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;192.168.0.30&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Execute &lt;code&gt;ifconfig&lt;/code&gt; and make sure that the ip of the interface &lt;code&gt;wlan0&lt;/code&gt; is set to &lt;code&gt;192.168.8.30&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Update packages and install &lt;code&gt;dnsmasq&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;pacman -Sy
+pacman -S dnsmasq
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Configuration of dnsmasq &lt;code&gt;/etc/dnsmasq.conf&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;domain-needed
+bogus-priv
+resolv-file&lt;span class="o"&gt;=&lt;/span&gt;/etc/resolv.dnsmasq.conf
+&lt;span class="nv"&gt;interface&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;eth0
+addn-hosts&lt;span class="o"&gt;=&lt;/span&gt;/etc/ad_block_hosts
+dhcp-range&lt;span class="o"&gt;=&lt;/span&gt;192.168.0.50,192.168.0.150
+dhcp-host&lt;span class="o"&gt;=&lt;/span&gt;00:11:22:33:44:55,compaq,192.168.0.50
+dhcp-host&lt;span class="o"&gt;=&lt;/span&gt;00:11:22:33:44:55,nexus1,192.168.0.51
+dhcp-host&lt;span class="o"&gt;=&lt;/span&gt;00:11:22:33:44:55,moto1,192.168.0.52
+dhcp-host&lt;span class="o"&gt;=&lt;/span&gt;00:11:22:33:44:55,moto2,192.168.0.53
+dhcp-host&lt;span class="o"&gt;=&lt;/span&gt;00:11:22:33:44:55,nexus2,192.168.0.54
+dhcp-host&lt;span class="o"&gt;=&lt;/span&gt;00:11:22:33:44:55,dell,192.168.0.55
+cache-size&lt;span class="o"&gt;=&lt;/span&gt;1500
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Edit &lt;code&gt;/etc/resolv.dnsmasq.conf&lt;/code&gt; with following contents&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;nameserver 8.8.8.8
+nameserver 8.8.4.4
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;I have also added ad blocking hosts file with dnsmasq so that ads will be blocked on my mobile devices. I downloaded one from http://winhelp2002.mvps.org/hosts.htm and moved the hosts file to &lt;code&gt;/etc/ad_block_hosts&lt;/code&gt;. Replaced all &lt;code&gt;0.0.0.0&lt;/code&gt; with '192.168.0.30`&lt;/p&gt;
+&lt;p&gt;Start and enable dnsmasq&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;systemctl start dnsmasq
+systemctl &lt;span class="nb"&gt;enable &lt;/span&gt;dnsmasq
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Setting up NAT to forward Internet to eth0&lt;/h3&gt;
+&lt;p&gt;First enable ip forwarding&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;sysctl net.ipv4.ip_forward&lt;span class="o"&gt;=&lt;/span&gt;1
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;To set ip forwarding permanently, edit &lt;code&gt;/etc/sysctl.d/30-ipforward.conf&lt;/code&gt; with the contents&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;net&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ipv4&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ip_forward&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;
+&lt;span class="n"&gt;net&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ipv6&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;conf&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;default&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;forwarding&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;
+&lt;span class="n"&gt;net&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ipv6&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;conf&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;forwarding&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;To setup NAT I used iptables&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;iptables -t nat -A POSTROUTING -o wlan0 -j MASQUERADE
+iptables -A FORWARD -i wlan0 -o eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -A FORWARD -i eth0 -o wlan0 -j ACCEPT
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;To make these rules active upon rebooting, save the rules to &lt;code&gt;/etc/iptables/iptables.rules&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;iptables-save &amp;gt; /etc/iptables/iptables.rules
+systemctl &lt;span class="nb"&gt;enable &lt;/span&gt;iptables.service
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Setup user account&lt;/h3&gt;
+&lt;p&gt;I installed sudo and created a new user called &lt;code&gt;pi&lt;/code&gt;. The new user is added to wheel group so that I can use &lt;code&gt;sudo&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;pacman -S sudo
+useradd -s /bin/bash -m -g wheel pi
+passwd pi
+&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;pi&amp;quot;&lt;/span&gt; &amp;gt; /etc/hostname
+hostname pi
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Setup minidlna&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;# Install minidlna&lt;/span&gt;
+pacman -S minidlna
+
+&lt;span class="c"&gt;# Change permissions of minidlna logs and db&lt;/span&gt;
+sudo chown pi minidlna
+sudo chown pi minidlna.log
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Edit &lt;code&gt;/etc/minidlna.conf&lt;/code&gt; with following &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;# Media directories from USB flash drive / HDD&lt;/span&gt;
+&lt;span class="nv"&gt;media_dir&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;V,/mnt/movies
+&lt;span class="nv"&gt;media_dir&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;V,/mnt/videos
+&lt;span class="nv"&gt;media_dir&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;V,/mnt/videosongs
+&lt;span class="nv"&gt;media_dir&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;A,/mnt/music
+&lt;span class="nv"&gt;media_dir&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;P,/mnt/photos
+
+&lt;span class="nv"&gt;db_dir&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/var/lib/minidlna
+&lt;span class="nv"&gt;log_dir&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/var/log
+&lt;span class="nv"&gt;port&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;8200
+&lt;span class="nv"&gt;friendly_name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;Raspberry Pi UPnP
+&lt;span class="nv"&gt;serial&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;12345678
+&lt;span class="nv"&gt;model_number&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1
+&lt;span class="nv"&gt;album_art_names&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;Cover.jpg/cover.jpg/AlbumArtSmall.jpg/albumartsmall.jpg/AlbumArt.jpg/albumart.jpg/Album.jpg/album.jpg/Folder.jpg/folder.jpg/Thumb.jpg/thumb.jpg
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Start and enable minidlna on startup&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;sudo systemctl start minidlna
+sudo systemctl &lt;span class="nb"&gt;enable &lt;/span&gt;minidlna
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Reboot&lt;/h3&gt;
+&lt;p&gt;Now it's time to reboot the Pi.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;systemctl halt
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;I had a 16 GB pendrive lying around. For now it should be enough to test the installation. In the future I am going to buy a external USB HDD. In my case the usb flash drive is /dev/sda1 and the drive is formatted to ext4&lt;/p&gt;
+&lt;p&gt;Unplug from monitor and remove HDMI cable. Remove keyboard and insert USB flash drive. I placed the pi near my battery and connected it to the powersupply.
+If everything is fine, the pi should boot up and connect to Huawei data card wifi network. It should act as a DHCP server and assign ip addresses to the client devices connected to the netgear router.&lt;/p&gt;
+&lt;h3&gt;Mount USB HDD&lt;/h3&gt;
+&lt;p&gt;Connect to Netgear's wifi and connect to pi using ssh&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;ssh pi@192.168.0.30
+
+&lt;span class="c"&gt;# mount it at /mnt&lt;/span&gt;
+mount /dev/sda1 /mnt
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;To make the mount permanent, edit &lt;code&gt;/etc/fstab&lt;/code&gt; with the following content&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;UUID&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;88ac72a4-7324-8a85&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;mnt&lt;/span&gt; &lt;span class="n"&gt;ext3&lt;/span&gt; &lt;span class="n"&gt;defaults&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;uid&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;pi&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now I opened up my laptop and connected to &lt;code&gt;media&lt;/code&gt; network. Fired up vlc. &lt;code&gt;ctrl + L&lt;/code&gt; to open playlist. Under 'local Network' section, find &lt;code&gt;Universal Plug'n'Play&lt;/code&gt;. It should show the Raspberry Pi minidlna server name. You can play movies and music under it.&lt;/p&gt;
+&lt;p&gt;For mobile devices, I'm using Bubbleupnp which itself is a upnp server. For my purposes, it is enough to have upnp client. So I have disabled local media server in bubbleupnp.&lt;/p&gt;</summary><category term="raspberrypi"></category></entry><entry><title>Authentication fix of Owncloud 6 for webfaction hosting</title><link href="/authentication-fix-owncloud6-webfaction.html" rel="alternate"></link><updated>2014-07-14T17:40:00+05:30</updated><author><name>Poomalairaj</name></author><id>tag:,2014-07-14:authentication-fix-owncloud6-webfaction.html</id><summary type="html">&lt;h3&gt;Owncloud and me&lt;/h3&gt;
 &lt;p&gt;I've been using owncloud ever since I switched to Nexus 4 from my beloved N900 since I didn't want to use google's services to store my contacts and calendars. Owncloud is a cool application to serve many of personal services like calendar, contacts, file sync, bookmarks, music etc. It becomes even cooler since you can sync/serve your data from your own infrastructure without relying on google or dropbox.&lt;/p&gt;
 &lt;p&gt;I've been using OC5 for a long time and couple of days ago, I decided to upgrade to OC6. While upgrading to OC6 I remembered that I did some code change in the OC's core files to fix something but I couldn't remember what it was. I finally convinced that it could be some weird bug in OC that was not fixed at that time and assuming that OC6 might have a fix for that, I just went on to upgrade to OC6. I did backup and upgraded to OC6. Everything went fine and I was able to login to OC6 from the browser.&lt;/p&gt;
 &lt;h3&gt;Basic Authentication &amp;amp; Webfaction&lt;/h3&gt;
