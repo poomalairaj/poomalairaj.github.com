@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <title>Poomalairaj's weblog</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Poomalairaj">
+
+    <!-- Le styles -->
+    <link href="./theme/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+          padding-top: 60px;
+          padding-bottom: 40px;
+      }
+      .sidebar-nav {
+          padding: 9px 0;
+      }
+    </style>
+    <link href="./theme/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="./theme/local.css" rel="stylesheet">
+    <link href="./theme/pygments.css" rel="stylesheet">
+<script>if(document.location.href.indexOf('github')==-1){ga_id='UA-30309581-1'}else{ga_id='UA-41310292-1'} var _gaq=[['_setAccount', ga_id],['_trackPageview']];(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.src='//www.google-analytics.com/ga.js';s.parentNode.insertBefore(g,s)}(document,'script'))</script>
+<script type="text/javascript">
+  var disqus_shortname = "poomalairaj"; // required: replace example with your forum shortname
+  var disqus_developer = 1;
+  
+  var disqus_identifier = "mastering-webapp-express-book-review.html";
+  (function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+
+  (function () {
+  var s = document.createElement('script'); s.async = true;
+  s.type = 'text/javascript';
+  s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  }());
+</script>
+  </head>
+  <body>
+<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+    
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container-fluid">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+	<span class="icon-bar"></span>
+	<span class="icon-bar"></span>
+	<span class="icon-bar"></span>
+      </a>
+      <a class="brand" href="./index.html">Poomalairaj's weblog</a>
+      <div class="nav-collapse collapse">
+	<ul class="nav">
+	  <li><a href="./pages/about-me.html">About Me</a></li>
+	  <li><a href="./pages/resume.html">Resume</a></li>
+	  <li class="active"><a href="./category/tech.html">Tech</a></li>
+	</ul>
+	<p class="navbar-text pull-right">
+	  <a class="navbar-link" href="./archives.html">[archives]</a>
+	  <a class="navbar-link" href="./tags.html">[tags]</a>
+	</p>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+</div>
+    <div class="container-fluid">
+      <div class="row-fluid">
+	<div class="span1">&nbsp;</div>
+	<div class="span10">
+	  <div class="row-fluid">
+            <div class="span9">
+<div class='article'>
+  <div class="page-header"><h1>Book Review: Mastering Web Application Development with Express</h1></div>
+  <div class="well small"><a class="more" href="./mastering-webapp-express-book-review.html">On 10 Nov 2014 at 12:12</a>
+by <a class="url fn" href="./author/poomalairaj.html">Poomalairaj</a> in <a href="./category/tech.html">Tech</a>
+ | <a href="./mastering-webapp-express-book-review.html#disqus_thread">Comments</a></div>
+  <div><p><img alt="Mastering Web Application Development with Express" src="/static/img/mastering-webapp-dev-express.jpg" /></p>
+<h3>TL;DR</h3>
+<p>This is a fantastic book for learning web application development using express on node.js by Alexandru Vlăduțu. The book covers express 4.x. This book covers almost all aspects of node.js development like http, validations, templating, testing, API development, best practices and lot more. The book introduces many fantastic node.js modules which can be helpful for a node.js web development. This is one of the best book you can find for learning and mastering express/node.js</p>
+<h3>You should get this book</h3>
+<p>Because</p>
+<ul>
+<li>You are using/planning to use node.js for your project</li>
+<li>node.js platform seems a bit overwhelming for you</li>
+<li>It covers express 4.x</li>
+<li>It gives you lots of example code and the code is of good quality</li>
+<li>Node.js modules are fragmented. This book gives you good intro to some of the best npm modules and tools</li>
+<li>You are interested in test first development approach</li>
+<li>It is well written and cool</li>
+</ul>
+<h3>Initial thoughts</h3>
+<p>When I started reading this book for the first time, I got a weird feeling. For example, in the first chapter there is a section to compare express with other frameworks but it doesn't actually compares express with other frameworks. At least in the conventional framework comparison sense. Very first command to install node applications uses some weird characters for hyphen in <code>npm install –save mongoose async pwd connect-flash connect-multiparty</code>. The command wouldn't work as expected if you just copy and paste. I guess they missed these hypen issue in proof reading.</p>
+<p>The book breaks some of the common pattern of any node.js book such as introduction to node.js, who developed it and Google's V8 engine blah blah. But the author could have at least introduced about how to install node.js and npm. A newbie to node.js following this book can have a hard time to execute <code>npm</code> command for the first time if they haven't installed it already. The very first command uses <code>express</code> to create <code>FileManager app</code> and the author missed to introduce on how to install express command.</p>
+<p>It looks like the author assumes that the reader must have a basic understanding of node.js application development. After all the book is "Mastering" series. A reader can google the missing parts easily however the author could have explained "kick start" things clearly. Another confusing thing was the code for <code>lib/db.js</code> has a comment stating that the code must be moved from app.js to here. It was hard to find the code for that. However, To make life easier, I just took the code from the github repo of the author.</p>
+<p>The author uses the term <code>routes</code> for a controllers feels a bit unusual.</p>
+<h3>Diving in</h3>
+<p>Apart from these initial glitches, the book is very well written and covers almost everything you need to know about express framework as well as node.js itself. Once you complete the FileManager project from the first chapter, you will become comfortable developing with express. The project covers some of the frequently used aspects of web development like source file organization, CRUD operations, session, file upload and basic error handling. A newbie might find the code in this chapter a bit overwhelming because you have to read a whole chapter just to arrive to a point to execute the application. The author doesn't tell you how to run the code till the end of the first chapter.</p>
+<p>The book goes on to explain about middlewares in the next chapter. The author introduces new things along the way such as introduction of <code>ejs</code>. The author aptly selects the projects to explain different aspects of express. The caching middleware is one such example. The author explains how middleware works internally, how to create your own middleware and configurable middlewares. There is also an example for mounting sub applications in this chapter which introduces isolated mountable sub applications that make modular application development.</p>
+<h3>RESTful APIs</h3>
+<p>These days every web application needs to provide some kind of API to their users. It is very natural to develop RESTful API's with express. A whole chapter is dedicated to development of RESTful APIs with express. The author starts by explaining about RESTfulness and explains about http verbs and status codes. It felt like the author could have skipped the detailed intro of http and status codes. Just a link to wikipedia article could have been sufficient. This chapter takes an example application called <code>SmartNotes</code>. The author simulates typical development cycle with requirements, API design, implementation, validation and tuning with the development of this example application.</p>
+<p>This sample application is developed in TDD style. Test suites are developed before even the development of real application. TDD is one of the aspects of Extreme programming. The author also introduces some useful node.js modules in this chapter to help API versioning and throttling the API.</p>
+<h3>Templating</h3>
+<p>A chapter is dedicated for template engines. This chapter explains about the types of templates, different templating engines and their styles. The author also explains some important aspects of templating like partials, layouts and template caching. Again the author introduces a fantastic module <code>consolidate.js</code> to use any template engine with express with minimal effort.</p>
+<h3>DRY code base</h3>
+<p>It is clear that the author emphasizes on clean and efficient code throughout the book. Every example explains how to develop quality software with node.js and express. A chapter explains solely about DRY principles. The author takes an example application called <code>MovieApp</code> which is again an API app. He starts to develop the application normally and then tunes the application using DRY principles and makes it better. The author introduces many tricks and tidbits to handle repeating real world problems in web app development.</p>
+<h3>Error handling</h3>
+<p>If there is one thing that many web developers slip often is error handling. Many times, developers build applications with the best case scenario in mind and skip worst cases altogether. This leads to uncaught exceptions and run time errors. Error handling, express' error handler, custom error handlers, logging errors are introduced in this chapter. This chapter also explains very well about stack traces and improving stack traces.</p>
+<h3>Performance</h3>
+<p>Once an application is built, it must be tuned to withstand real world traffic. This chapter explains how to improve the performance of the application by caching, serving https using stud, caching templates, compress and minifying, caching header management, use of cdns etc.</p>
+<h3>Monitoring, Debugging and Security</h3>
+<p>We have two chapters dedicated for monitoring live application, debugging and application security.
+Javascript's event based nature and callbacks makes debugging hard. Fear not! There is a chapter to effectively debug your buggy express application. Another chapter helps to understand various security issues and how to improve security of node.js application.</p>
+<h3>Testing</h3>
+<p>Final chapter talks about testing and code quality. Though we had an introduction of TDD and test first approach in third chapter, the final chapter gives us a good grasp on improving code quality. There are many testing frameworks available for node.js. The author introduces some of the very useful testing modules to make testing a breeze. As part of improving code quality, this chapter gives us a peek into git, Continuous Integration, code lint and client side testing.</p>
+<h3>Final thoughts</h3>
+<p>I had negative feelings when I started out this book but it turned very positive as I continue to read it. I had tried couple of books on node.js and express. Many of the books are outdated now and they lacked enough example code; Even books with title "Recipes".</p>
+<p>You need to have experience in web development to follow this book. If you are an absolute beginner, I would suggest you to research and read more about web development and node.js to follow with this book. This book can also be used as a reference book for node.js development and best practices of development in general.</p>
+<p>One of the problems with npm packages is that you never know which one is the best for a particular purpose. You have thousands of modules. As this platform is an evolving one, API's frequently change. Backward compatibility is often broken. You need an up to date book to keep up with this. Even though the title of the books says that it is about express, it explains many aspects of node.js and npm modules.</p></div>
+  <div>
+    <h2>Comments</h2>
+    <div id="disqus_thread"></div>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+</div>	
+            </div><!--/span-->
+
+	    <div class="span3">
+
+
+            </div><!--/span-->
+
+	  </div>
+	</div>
+      </div><!--/row-->
+
+      <hr>
+
+      <footer>
+        <p>Powered by <a href="http://alexis.notmyidea.org/pelican/">Pelican</a></p>
+	<p>&copy; Poomalairaj 2014</p>
+      </footer>
+
+    </div><!--/.fluid-container-->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="./theme/js/jquery-1.7.2.min.js"><\/script>')</script>
+    <script src="./theme/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./theme/js/modernizr-2.5.3-respond-1.1.0.min.js"></script>
+    <script type="text/javascript">
+	$(document.links).filter(function() {
+		    return this.hostname != window.location.hostname;
+	}).attr('target', '_blank');
+    </script>
+  </body>
+</html>
